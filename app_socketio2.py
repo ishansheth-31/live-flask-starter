@@ -13,7 +13,7 @@ from deepgram import (
 load_dotenv()
 
 app_socketio = Flask("app_socketio")
-socketio = SocketIO(app_socketio, cors_allowed_origins=['http://127.0.0.1:8000'])
+socketio = SocketIO(app_socketio, cors_allowed_origins=['http://127.0.0.1:5000'])
 
 API_KEY = os.getenv("DEEPGRAM_API_KEY")
 
