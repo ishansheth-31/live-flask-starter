@@ -13,7 +13,7 @@ from deepgram import (
 load_dotenv()
 
 app_socketio = Flask("app_socketio")
-socketio = SocketIO(app_socketio, cors_allowed_origins=['http://127.0.0.1:5000'])
+socketio = SocketIO(app_socketio, cors_allowed_origins=['http://127.0.0.1:8000'])
 
 API_KEY = os.getenv("DEEPGRAM_API_KEY")
 
@@ -61,7 +61,6 @@ def initialize_deepgram_connection():
 
 @socketio.on('audio_stream')
 def handle_audio_stream(data):
-    # print("audio data received")
     if dg_connection:
         dg_connection.send(data)
 
@@ -72,10 +71,6 @@ def handle_toggle_transcription(data):
     if action == "start":
         print("Starting Deepgram connection")
         initialize_deepgram_connection()
-    elif action == "stop":
-        if dg_connection:
-            dg_connection.finish()
-            dg_connection = None
 
 @socketio.on('connect')
 def server_connect():
