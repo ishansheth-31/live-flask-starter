@@ -2,6 +2,9 @@ let isRecording = false;
 let socket;
 let microphone;
 
+const pathParts = window.location.href.split('/');
+const patient_id = '666a928022a8b8a35f508973';
+
 const socket_port = 5001;
 socket = io(
   "http://" + window.location.hostname + ":" + socket_port.toString()
@@ -49,11 +52,11 @@ async function stopRecording() {
   if (isRecording === true) {
     microphone.stop();
     microphone.stream.getTracks().forEach((track) => track.stop()); // Stop all tracks
-    socket.emit("toggle_transcription", { action: "stop" });
     microphone = null;
     isRecording = false;
     console.log("Client: Microphone closed");
     document.body.classList.remove("recording");
+    socket.emit("toggle_transcription/${patient_id}", { action: "stop" });
   }
 }
 
@@ -62,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   recordButton.addEventListener("click", () => {
     if (!isRecording) {
-      socket.emit("toggle_transcription", { action: "start" });
+      socket.emit("toggle_transcription/${patient_id}", { action: "start" });
       startRecording().catch((error) =>
         console.error("Error starting recording:", error)
       );
